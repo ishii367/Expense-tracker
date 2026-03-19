@@ -5,9 +5,11 @@ import csv
 from io import StringIO
 from collections import defaultdict
 import os
-#from dotenv import load_dotenv
-
-#load_dotenv()
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except:
+    pass
 
 app = Flask(__name__)
 app.secret_key = "super_secret_key"
@@ -469,4 +471,5 @@ def set_budget():
     return redirect(url_for("home"))
 
 if __name__ == "__main__":
-    app.run(debug=False)
+    port = int(os.environ.get("PORT", 5000))  # Render provides PORT
+    app.run(host="0.0.0.0", port=port)
