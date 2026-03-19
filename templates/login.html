@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='auth.css') }}">
+</head>
+<body>
+
+<div class="auth-container">
+    <h2>Welcome Back 👋</h2>
+
+    {% if error %}
+        <div class="error-message">❌ Invalid username or password</div>
+    {% endif %}
+
+    <form method="POST">
+        <input type="text" name="username" placeholder="Username" required>
+
+        <div class="password-box">
+            <input type="password" name="password" id="login-password" placeholder="Password" required>
+            <span onclick="togglePassword('login-password')">👁️</span>
+        </div>
+
+        <button type="submit">Login</button>
+    </form>
+
+    <p class="switch">
+        New here? <a href="/register">Register</a>
+    </p>
+</div>
+
+<script src="{{ url_for('static', filename='auth.js') }}"></script>
+</body>
+</html>

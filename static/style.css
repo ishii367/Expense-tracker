@@ -1,0 +1,333 @@
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: "Segoe UI", sans-serif;
+}
+
+.container {
+    background: white;
+    padding: 30px;
+    width: 100%;
+    max-width: 540px;
+    border-radius: 15px;
+}
+
+.total-box {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.history-link {
+    display: block;
+    text-align: center;
+    margin: 10px 0;
+    text-decoration: none;
+    color: #667eea;
+}
+
+.expense-form input,
+.expense-form select,
+.expense-form button,
+.split-card input,
+.split-card button {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 8px;
+}
+
+.expense-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.expense-table th,
+.expense-table td {
+    border: 1px solid #ddd;
+    padding: 6px;
+    text-align: center;
+}
+
+.filter-form {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+mark {
+    background: #fff3cd;
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
+.split-card {
+    background: #f9f9ff;
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+}
+
+.budget-box {
+    background: #fff;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+}
+
+@media (max-width: 600px) {
+    .container {
+        width: 95%;
+        padding: 10px;
+    }
+
+    input, select, button {
+        width: 100%;
+        font-size: 16px;
+    }
+
+    h1 {
+        font-size: 22px;
+        text-align: center;
+    }
+}
+
+/* ---------- GLOBAL FIX ---------- */
+.container {
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* Make table scrollable on small screens */
+.expense-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.expense-table th,
+.expense-table td {
+    padding: 10px;
+    text-align: left;
+}
+
+@media (max-width: 768px) {
+
+    /* Container adjustment */
+    .container {
+        width: 95%;
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 22px;
+        text-align: center;
+    }
+
+    /* Forms */
+    .expense-form input,
+    .expense-form select,
+    .expense-form button {
+        width: 100%;
+        margin-bottom: 10px;
+        font-size: 16px;
+    }
+
+    /* Split section */
+    .split-card input,
+    .split-card button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    /* Budget box */
+    .budget-box {
+        padding: 10px;
+    }
+
+    /* Chart fix */
+    canvas {
+        width: 100% !important;
+        height: auto !important;
+    }
+
+    /* Table scroll */
+    .expense-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    /* Buttons spacing */
+    .history-link {
+        display: block;
+        margin: 10px 0;
+        text-align: center;
+    }
+}
+
+.container > * {
+    margin-bottom: 20px;
+}
+
+button {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #5a67d8;
+    transform: scale(1.03);
+}
+
+input, select {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.total-box,
+.budget-box,
+.split-card {
+    background: #ffffff;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.expense-form input,
+.expense-form select,
+.expense-form button {
+    margin-bottom: 10px;
+}
+
+/* GENERAL BUTTON STYLE */
+.btn {
+    display: inline-block;
+    text-align: center;
+    padding: 12px 15px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+/* HISTORY BUTTON */
+.history-btn {
+    display: block;
+    width: calc(100% - 20px);  /* 👈 key change */
+    margin: 10px auto;
+    background: #667eea;   /* same as Add Expense */
+    color: white;
+    padding: 12px;         /* slightly bigger */
+    border-radius: 6px;
+    text-align: center;
+    font-weight: bold;
+    text-decoration: none;
+    margin: 10px 0;
+    transition: 0.3s;
+    /*margin-bottom: 15px;*/
+}
+
+.history-btn:hover {
+    background: #5a67d8;
+    transform: scale(1.02);
+}
+
+.logout-btn {
+    display: block;
+    width: calc(100% - 20px);
+    margin: 10px auto;
+    background: #e53935;   /* red color */
+    color: white;
+    padding: 14px;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.logout-btn:hover {
+    background: #d32f2f;
+    transform: scale(1.02);
+}
+
+/* MODAL BACKGROUND */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+}
+
+/* MODAL BOX */
+.modal-content {
+    background: white;
+    width: 300px;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+/* BUTTONS */
+.modal-buttons {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.cancel-btn {
+    background: #ccc;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.confirm-btn {
+    background: #e53935;
+    color: white;
+    padding: 10px;
+    border-radius: 6px;
+    text-decoration: none;
+}
+
+/* HOVER */
+.confirm-btn:hover {
+    background: #d32f2f;
+}
+
+.delete-btn {
+    display: block;
+    width: calc(100% - 20px);
+    margin: 10px auto;
+    background: #000;   /* black = serious action */
+    color: white;
+    padding: 14px;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.delete-btn:hover {
+    background: #333;
+    transform: scale(1.02);
+}

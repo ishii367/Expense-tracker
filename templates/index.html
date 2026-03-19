@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Expense Tracker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <h1>Expense Tracker</h1>
+    {% if success %}
+    <p style="color:green; text-align:center;">
+        Expense added successfully ✅
+    </p>
+{% endif %}
+
+    <!-- TOTAL -->
+    <div class="total-box">
+        Total Expense: ₹{{ total }}
+    </div>
+
+    <a href="/history" class="btn history-btn">📋 Expense History</a>
+
+    <!-- ================= BUDGET ================= -->
+    <div class="budget-box">
+        <h3>💰 Monthly Budget</h3>
+
+        <form method="POST" action="/set_budget">
+            <input type="number" name="amount" placeholder="Set Budget (₹)" required>
+
+            <input type="text" name="month"
+                   value="{{ current_month if current_month else '' }}"
+                   readonly>
+
+            <button type="submit">Save Budget</button>
+        </form>
+
+        <p>Budget: ₹{{ budget }}</p>
+        <p>Spent: ₹{{ total }}</p>
+
+        {% if budget > 0 %}
+            <p>Remaining: ₹{{ budget - total }}</p>
+
+            {% if total > budget %}
+                <p style="color:red;">⚠ Budget Exceeded!</p>
+            {% endif %}
+        {% endif %}
+    </div>
+
+    <!-- ================= FORM ================= -->
+    <form method="POST"
+          action="{% if edit_index is not none %}/update/{{ edit_index }}{% else %}/{% endif %}"
+          class="expense-form">
+
+        <!-- TITLE -->
+        <input type="text" name="title" placeholder="Title"
+               value="{{ edit_expense.title if edit_expense else '' }}" required>
+
+        <!-- AMOUNT -->
+        <input type="number" name="amount" placeholder="Amount"
+               value="{{ edit_expense.amount if edit_expense else '' }}" required>
+
+        <!-- CATEGORY -->
+        <select name="category">
+            <option {% if edit_expense and edit_expense.category == 'Food' %}selected{% endif %}>Food</option>
+            <option {% if edit_expense and edit_expense.category == 'Travel' %}selected{% endif %}>Travel</option>
+            <option {% if edit_expense and edit_expense.category == 'Rent' %}selected{% endif %}>Rent</option>
+            <option {% if edit_expense and edit_expense.category == 'Shopping' %}selected{% endif %}>Shopping</option>
+            <option {% if edit_expense and edit_expense.category == 'Other' %}selected{% endif %}>Other</option>
+            <option {% if edit_expense and edit_expense.category == 'Split Bill' %}selected{% endif %}>Split Bill</option>
+        </select>
+
+        <!-- DATE -->
+        <input type="date" name="date"
+               value="{{ edit_expense.date if edit_expense else '' }}" required>
+
+        <button type="submit">
+            {% if edit_index is not none %}
+                Update Expense
+            {% else %}
+                Add Expense
+            {% endif %}
+        </button>
+    </form>
+
+    <hr>
+
+    <!-- ================= SPLIT BILL ================= -->
+    <div class="split-card">
+        <h3>💸 Split a Bill</h3>
+
+        <form method="POST" action="/split">
+            <input type="number" step="0.01" name="total" placeholder="Total Bill Amount (₹)" required>
+            <input type="number" name="people" placeholder="Number of People" required>
+            <input type="date" name="date" required>
+
+            <button type="submit">Split & Save My Share</button>
+        </form>
+    </div>
+
+    <!-- ================= CHART ================= -->
+        {% if monthly_values %}
+    <canvas id="chart"></canvas>
+{% else %}
+    <p style="text-align:center; margin-top:20px;">
+        No expenses yet. Add your first one!
+    </p>
+{% endif %}
+
+    <a href="#" class="logout-btn" onclick="openLogoutModal()">Logout</a>
+    <a href="#" class="delete-btn" onclick="openDeleteModal()">Delete Account</a>
+</div>
+
+<script>
+const labels = {{ monthly_labels | tojson | safe }};
+const dataValues = {{ monthly_values | tojson | safe }};
+
+new Chart(document.getElementById("chart"), {
+    type: "bar",
+    data: {
+        labels: labels,
+        datasets: [{
+            label: "Monthly Expense",
+            data: dataValues
+        }]
+    },
+    options: {
+        scales: {
+            y: { beginAtZero: true }
+        }
+    }
+});
+</script>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+<div id="logoutModal" class="modal">
+
+    <div class="modal-content">
+        <h3>Confirm Logout</h3>
+        <p>Are you sure you want to logout?</p>
+
+        <div class="modal-buttons">
+            <button class="cancel-btn" onclick="closeLogoutModal()">Cancel</button>
+            <a href="/logout" class="confirm-btn">Logout</a>
+        </div>
+    </div>
+</div>
+
+<script>
+function openLogoutModal() {
+    document.getElementById("logoutModal").style.display = "block";
+}
+
+function closeLogoutModal() {
+    document.getElementById("logoutModal").style.display = "none";
+}
+</script>
+
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <h3>Delete Account</h3>
+
+        <p>This will permanently delete your account and all data.</p>
+
+        <p style="color:red; font-weight:bold;">
+            ⚠ This action cannot be undone!
+        </p>
+
+        <div class="modal-buttons">
+            <button class="cancel-btn" onclick="closeDeleteModal()">Cancel</button>
+            <a href="/delete_user" class="confirm-btn">Delete</a>
+        </div>
+    </div>
+</div>
+
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <h3>Delete Account</h3>
+        <p>This will permanently delete your account and all data.</p>
+
+        <div class="modal-buttons">
+            <button class="cancel-btn" onclick="closeDeleteModal()">Cancel</button>
+            <a href="/delete_user" class="confirm-btn">Delete</a>
+        </div>
+    </div>
+</div>
+
+<script>
+function openDeleteModal() {
+    document.getElementById("deleteModal").style.display = "block";
+}
+
+function closeDeleteModal() {
+    document.getElementById("deleteModal").style.display = "none";
+}
+</script>
+
+</body>
+</html>

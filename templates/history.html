@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Expense History</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+    <h1>Expense History</h1>
+
+    <form method="GET" class="filter-form">
+        <input type="text" name="search" placeholder="Search..." value="{{ search_query }}">
+
+        <select name="category">
+            <option>All</option>
+            {% for c in ["Food","Travel","Rent","Shopping","Other","Split Bill"] %}
+                <option {% if selected_category == c %}selected{% endif %}>{{ c }}</option>
+            {% endfor %}
+        </select>
+
+        <select name="month">
+            <option value="All">All</option>
+            {% for m in months %}
+                <option value="{{ m }}" {% if selected_month == m %}selected{% endif %}>{{ m }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Apply</button>
+    </form>
+
+    <a href="/export" class="history-link">⬇ Export to CSV</a>
+    <a href="/export_excel" class="history-link">OR 📊 Export to Excel</a>
+
+    <table class="expense-table">
+        <tr>
+            <th>Title</th>
+            <th>Amount</th>
+            <th>Category</th>
+            <th>Date</th>
+            <th>Actions</th>
+        </tr>
+
+        {% for e in expenses %}
+        <tr>
+            <td>
+                {% if search_query %}
+                    {{ e.title | replace(search_query, "<mark>" ~ search_query ~ "</mark>") | safe }}
+                {% else %}
+                    {{ e.title }}
+                {% endif %}
+            </td>
+
+            <td>₹{{ e.amount }}</td>
+
+            <td>
+                {% if search_query %}
+                    {{ e.category | replace(search_query, "<mark>" ~ search_query ~ "</mark>") | safe }}
+                {% else %}
+                    {{ e.category }}
+                {% endif %}
+            </td>
+
+            <td>{{ e.formatted_date }}</td>
+
+            <td>
+                <a href="/edit/{{ loop.index0 }}">✏️</a>
+                <!-- ✅ DELETE -->
+                <a href="/delete/{{ loop.index0 }}" onclick="return confirm('Delete this expense?')">🗑️</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <a href="/" class="history-link">⬅ Back to Dashboard</a>
+</div>
+
+</body>
+</html>
