@@ -5,9 +5,9 @@ import csv
 from io import StringIO
 from collections import defaultdict
 import os
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 
-load_dotenv()
+#load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = "super_secret_key"
