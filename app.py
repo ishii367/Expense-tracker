@@ -12,7 +12,7 @@ except:
     pass
 
 app = Flask(__name__)
-app.secret_key = "super_secret_key"
+app.secret_key = os.getenv("secret_key")
 
 
 def get_db_connection():
@@ -22,7 +22,7 @@ def get_db_connection():
         password=os.getenv("DB_PASSWORD"),
         database=os.getenv("DB_NAME"),
         port=int(os.getenv("DB_PORT")),
-        ssl_disabled=False
+        ssl_ca=None
     )
 
 
